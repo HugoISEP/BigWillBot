@@ -19,7 +19,6 @@ class Ftx:
     time_frame = 900
 
     def __init__(self):
-        logging.basicConfig(level=logging.INFO)
         config = Configuration()
         self.client = ftx.FtxClient(
             api_key=config.api_key,

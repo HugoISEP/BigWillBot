@@ -1,6 +1,6 @@
 from configparser import ConfigParser
 
-path_to_configuration_file = "app/configuration/config.ini"
+path_to_configuration_file = "config.ini"
 
 
 class Configuration:

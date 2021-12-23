@@ -18,6 +18,7 @@ log_configuration = {
     },
     "loggers": {
         "FTX": {"handlers": ["default"], "level": "DEBUG"},
-        "MAIN": {"handlers": ["default"], "level": "DEBUG"}
+        "MAIN": {"handlers": ["default"], "level": "DEBUG"},
+        "BIG_WILL": {"handlers": ["default"], "level": "DEBUG"}
     },
 }

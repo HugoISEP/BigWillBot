@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import List
 
@@ -22,6 +23,7 @@ class BigWill:
     take_profit_pct = 0.15
     max_shop = 35
     max_positions = 3
+    log = logging.getLogger("BIG_WILL")
 
     def buy_condition(self, row: Series, previous_row=None) -> bool:
         return 0 <= row['AO'] < previous_row['AO'] and row['WillR'] < self.willr_buy_limit and row['EMA50'] > row['EMA100']
@@ -73,6 +75,12 @@ class BigWill:
 
         current_positions = len(cryptos_in_sell_position)
 
+        self.log.info(
+            f"current positions: {current_positions}, "
+            f"cryptos in sell position: {len(cryptos_in_sell_position)}, "
+            f"cryptos in buy position: {len(cryptos_in_buy_position)}"
+        )
+
         # BUY
         if current_positions < self.max_positions:
             # Iterate through balance which has coin
@@ -117,5 +125,3 @@ class BigWill:
                         market_name,
                         Utils.truncate(crypto_info.coins)
                     )
-
-

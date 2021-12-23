@@ -25,4 +25,4 @@ archive.zip
 .*.sw?
 
 # Credentials
-app/configuration/config.ini
+config.ini

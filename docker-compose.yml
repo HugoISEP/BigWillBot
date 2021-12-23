@@ -6,5 +6,6 @@ services:
       context: .
     volumes:
       - ./app:/code/app
+      - ./config.ini:/code/config.ini
     ports:
       - "80:80"

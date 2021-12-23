@@ -10,7 +10,7 @@ class Utils:
 
     @staticmethod
     def load_json_pair_symbols():
-        with open("resources/pair_symbols.json", 'r') as f:
+        with open("app/resources/pair_symbols.json", 'r') as f:
             return json.load(f)["ftxClassicPair"]
 
     @staticmethod
