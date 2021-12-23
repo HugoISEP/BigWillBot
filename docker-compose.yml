@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  bot:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - ./app:/code/app
+    ports:
+      - "80:80"
