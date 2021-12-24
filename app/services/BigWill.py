@@ -80,6 +80,23 @@ class BigWill:
             f"cryptos in buy position: {len(cryptos_in_buy_position)}"
         )
 
+        # SELL
+        if len(cryptos_in_sell_position) > 0:
+            for crypto_info in cryptos_in_sell_position:
+                current_row = crypto_info.data.iloc[-1]
+                previous_row = crypto_info.data.iloc[-2]
+
+                if self.sell_condition(current_row):
+                    market_name = crypto_info.symbol + "/USD"
+                    client.cancel_orders(market_name)
+                    time.sleep(2)
+
+                    client.sell(
+                        market_name,
+                        Utils.truncate(crypto_info.coins)
+                    )
+                    current_positions -= 1
+
         # BUY
         if current_positions < self.max_positions:
             # Iterate through balance which has coin
@@ -87,7 +104,7 @@ class BigWill:
                 current_row = crypto_info.data.iloc[-1]
                 previous_row = crypto_info.data.iloc[-2]
 
-                if self.buy_condition(current_row, previous_row):
+                if self.buy_condition(current_row, previous_row) and current_positions < self.max_positions:
                     market_name = crypto_info.symbol + "/USD"
                     client.cancel_orders(market_name)
                     time.sleep(2)
@@ -108,19 +125,4 @@ class BigWill:
                         current_price + self.take_profit_pct * current_price,
                         "limit"
                     )
-
-        # SELL
-        if len(cryptos_in_sell_position) > 0:
-            for crypto_info in cryptos_in_sell_position:
-                current_row = crypto_info.data.iloc[-1]
-                previous_row = crypto_info.data.iloc[-2]
-
-                if self.sell_condition(current_row):
-                    market_name = crypto_info.symbol + "/USD"
-                    client.cancel_orders(market_name)
-                    time.sleep(2)
-
-                    client.sell(
-                        market_name,
-                        Utils.truncate(crypto_info.coins)
-                    )
+                    current_positions += 1
