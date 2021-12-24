@@ -1,5 +1,6 @@
 import json
 from math import floor
+from typing import List
 
 import pandas as pd
 
@@ -9,7 +10,7 @@ class Utils:
     NUMBER_OF_VALUES = 200
 
     @staticmethod
-    def load_json_pair_symbols():
+    def load_json_pair_symbols() -> List[str]:
         with open("app/resources/pair_symbols.json", 'r') as f:
             return json.load(f)["ftxClassicPair"]
 

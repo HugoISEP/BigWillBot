@@ -76,7 +76,6 @@ class BigWill:
         current_positions = len(cryptos_in_sell_position)
 
         self.log.info(
-            f"current positions: {current_positions}, "
             f"cryptos in sell position: {len(cryptos_in_sell_position)}, "
             f"cryptos in buy position: {len(cryptos_in_buy_position)}"
         )

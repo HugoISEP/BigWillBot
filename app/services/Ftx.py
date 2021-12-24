@@ -49,7 +49,6 @@ class Ftx:
 
     def buy(self, pair_symbol: str, tokens_number: float) -> PlaceOrderResponse:
         try:
-            self.log.info(f"Buy order: {tokens_number} coins at {pair_symbol} market")
             response = PlaceOrderResponse(**self.client.place_order(
                 market=pair_symbol,
                 side="buy",
@@ -80,7 +79,7 @@ class Ftx:
                 type=order_type,
                 price=price
             ))
-            self.log.info("Sell order: {response.size} coins at {response.market} market")
+            self.log.info(f"Sell order: {response.size} coins at {response.market} market")
             return response
         except Exception as e:
             self.log.error(f"Current market price: {e}")
