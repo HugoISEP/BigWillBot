@@ -1,5 +1,4 @@
 from logging.config import dictConfig
-from typing import Optional
 from fastapi import FastAPI
 import logging
 from fastapi_utils.tasks import repeat_every

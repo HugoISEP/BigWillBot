@@ -42,15 +42,14 @@ class Ftx:
             list_balance: List[FtxBalance] = parse_obj_as(List[FtxBalance], data)
             return list_balance
         except Exception as e:
-            self.log.error("Get balances: {}", e)
-
+            self.log.error(f"Get balances: {e}")
 
     def get_active_positions_number(self):
         len([balance for balance in self.get_balances() if balance.coin != "USD" and balance.free != 0.0])
 
     def buy(self, pair_symbol: str, tokens_number: float) -> PlaceOrderResponse:
         try:
-            self.log.info("Buy order: {} coins at {} market", tokens_number, pair_symbol)
+            self.log.info(f"Buy order: {tokens_number} coins at {pair_symbol} market")
             response = PlaceOrderResponse(**self.client.place_order(
                 market=pair_symbol,
                 side="buy",
@@ -58,20 +57,21 @@ class Ftx:
                 type="market",
                 price=None
             ))
-            self.log.info("Buy order: {} coins at {} market", response.size, response.market)
+            self.log.info(f"Buy order: {response.size} coins at {response.market} market")
             return response
         except Exception as e:
-            self.log.error("Buy order: {}", e)
+            self.log.error(f"Buy order: {e}")
 
     def get_current_market_price(self, pair_symbol: str):
         try:
             response = self.client.get_market(pair_symbol)["price"]
-            self.log.info("Current {} market price: {}", pair_symbol, response)
+            self.log.info(f"Current {pair_symbol} market price: {response}")
             return response
         except Exception as e:
-            self.log.error("Current market price: {}", e)
+            self.log.error(f"Current market price: {e}")
 
-    def sell(self, pair_symbol: str, coins_numbers: float, price=None, order_type: str = "market") -> PlaceOrderResponse:
+    def sell(self, pair_symbol: str, coins_numbers: float, price=None,
+             order_type: str = "market") -> PlaceOrderResponse:
         try:
             response = PlaceOrderResponse(**self.client.place_order(
                 market=pair_symbol,
@@ -80,14 +80,14 @@ class Ftx:
                 type=order_type,
                 price=price
             ))
-            self.log.info("Sell order: {} coins at {} market", response.size, response.market)
+            self.log.info("Sell order: {response.size} coins at {response.market} market")
             return response
         except Exception as e:
-            self.log.error("Current market price: {}", e)
+            self.log.error(f"Current market price: {e}")
 
     def cancel_orders(self, pair_symbol: str):
         try:
             self.client.cancel_orders(pair_symbol)
-            self.log.info("Cancel order for {} market", pair_symbol)
+            self.log.info(f"Cancel order for {pair_symbol} market")
         except Exception as e:
-            self.log.error("Cancel order for {} market: {}", e)
+            self.log.error(f"Cancel order for {pair_symbol} market: {e}")
