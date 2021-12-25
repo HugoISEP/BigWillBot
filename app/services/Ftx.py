@@ -79,10 +79,10 @@ class Ftx:
                 type=order_type,
                 price=price
             ))
-            self.log.info(f"Sell order: {response.size} coins at {response.market} market")
+            self.log.info(f"{order_type} sell order: {response.size} coins at {response.market} market")
             return response
         except Exception as e:
-            self.log.error(f"Fail sell order {pair_symbol} for {coins_numbers} coins: {e}")
+            self.log.error(f"Fail {order_type} sell order {pair_symbol} for {coins_numbers} coins: {e}")
 
     def cancel_orders(self, pair_symbol: str):
         try:
