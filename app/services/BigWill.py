@@ -93,7 +93,7 @@ class BigWill:
 
                     client.sell(
                         market_name,
-                        Utils.truncate(crypto_info.coins)
+                        crypto_info.coins
                     )
                     current_positions -= 1
 
@@ -111,17 +111,19 @@ class BigWill:
 
                     buy_quantity_in_usd = total_usd_balance / (self.max_positions - current_positions)
                     current_price = client.get_current_market_price(market_name)
-                    quantity_to_buy = Utils.truncate(float(buy_quantity_in_usd) / current_price)
+                    quantity_to_buy = float(buy_quantity_in_usd) / current_price
 
                     response = client.buy(
                         market_name,
                         quantity_to_buy
                     )
 
+                    time.sleep(2)
+
                     # Place Take Profit
                     client.sell(
                         market_name,
-                        Utils.truncate(response.size),
+                        response.size,
                         current_price + self.take_profit_pct * current_price,
                         "limit"
                     )
