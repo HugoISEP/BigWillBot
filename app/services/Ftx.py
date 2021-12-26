@@ -37,10 +37,10 @@ class Ftx:
 
     def get_balances(self) -> List[FtxBalance]:
         try:
-            self.log.info("Get balances")
             data = self.client.get_balances()
-            list_balance: List[FtxBalance] = parse_obj_as(List[FtxBalance], data)
-            return list_balance
+            list_balances: List[FtxBalance] = parse_obj_as(List[FtxBalance], data)
+            self.log.info(f"Get balances: {list_balances}")
+            return list_balances
         except Exception as e:
             self.log.error(f"Get balances: {e}")
 

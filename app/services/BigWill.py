@@ -49,6 +49,8 @@ class BigWill:
         client = Ftx()
         pair_symbols = Utils.load_json_pair_symbols()
         balances_list = client.get_balances()
+        optional_usd_balance = [balance.usdValue for balance in balances_list if balance.coin == "USD"]
+        usd_balance = optional_usd_balance[0] if len(optional_usd_balance) == 1 else 0.0
         total_usd_balance = sum([balance.usdValue for balance in balances_list])
         cryptos_in_buy_position: List[CryptoInfo] = []
         cryptos_in_sell_position: List[CryptoInfo] = []
@@ -109,7 +111,7 @@ class BigWill:
                     client.cancel_orders(market_name)
                     time.sleep(2)
 
-                    buy_quantity_in_usd = total_usd_balance / (self.max_positions - current_positions)
+                    buy_quantity_in_usd = usd_balance / (self.max_positions - current_positions)
                     current_price = client.get_current_market_price(market_name)
                     quantity_to_buy = float(buy_quantity_in_usd) / current_price
 
