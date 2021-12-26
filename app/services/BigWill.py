@@ -93,9 +93,12 @@ class BigWill:
                     client.cancel_orders(market_name)
                     time.sleep(2)
 
+                    # Need to refresh the balance after cancelling the order
+                    coins_to_sell = [balance for balance in client.get_balances() if balance.coin == crypto_info.symbol][0].free
+
                     client.sell(
                         market_name,
-                        crypto_info.coins
+                        coins_to_sell
                     )
                     current_positions -= 1
 
