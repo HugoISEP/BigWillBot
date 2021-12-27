@@ -39,13 +39,10 @@ class Ftx:
         try:
             data = self.client.get_balances()
             list_balances: List[FtxBalance] = parse_obj_as(List[FtxBalance], data)
-            self.log.info(f"Get balances: {list_balances}")
+            self.log.info(f"Get balances")
             return list_balances
         except Exception as e:
             self.log.error(f"Get balances: {e}")
-
-    def get_active_positions_number(self):
-        len([balance for balance in self.get_balances() if balance.coin != "USD" and balance.free != 0.0])
 
     def buy(self, pair_symbol: str, tokens_number: float) -> PlaceOrderResponse:
         try:
@@ -59,7 +56,7 @@ class Ftx:
             self.log.info(f"Buy order: {response.size} coins at {response.market} market")
             return response
         except Exception as e:
-            self.log.error(f"Buy order: {e}")
+            self.log.error(f"Buy order {pair_symbol} for {tokens_number} coins: {e}")
 
     def get_current_market_price(self, pair_symbol: str):
         try:
