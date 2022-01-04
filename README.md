@@ -8,5 +8,6 @@ api_key = <YOUR API KEY>
 api_secret = <YOUR API SECRET>
 subaccount_name = <YOUR SUB ACCOUNT>
 ```
-2. launch the command 
-```docker compose up -d```
+
+## launch the project
+``` uvicorn app.main:app --reload --port 8000```
