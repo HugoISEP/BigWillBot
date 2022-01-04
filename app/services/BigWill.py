@@ -6,6 +6,7 @@ import ta
 from pandas import Series, DataFrame
 
 from app.models.CryptoInfo import CryptoInfo
+from app.models.FtxBalance import FtxBalance
 from app.services.Ftx import Ftx
 from app.services.Utils import Utils
 
@@ -44,13 +45,16 @@ class BigWill:
         df['EMA50'] = ta.trend.ema_indicator(close=df['close'], window=50)
         df['EMA100'] = ta.trend.ema_indicator(close=df['close'], window=100)
 
+    def _get_usd_balance(self, balances_list: List[FtxBalance]):
+        optional_usd_balance = [balance.usdValue for balance in balances_list if balance.coin == "USD"]
+        return optional_usd_balance[0] if len(optional_usd_balance) == 1 else 0.0
+
     def run(self):
         # -- Value initialisation --
         client = Ftx()
         pair_symbols = Utils.load_json_pair_symbols()
         balances_list = client.get_balances()
-        optional_usd_balance = [balance.usdValue for balance in balances_list if balance.coin == "USD"]
-        usd_balance = optional_usd_balance[0] if len(optional_usd_balance) == 1 else 0.0
+        usd_balance = self._get_usd_balance(balances_list)
         total_usd_balance = sum([balance.usdValue for balance in balances_list])
         cryptos_in_buy_position: List[CryptoInfo] = []
         cryptos_in_sell_position: List[CryptoInfo] = []
@@ -100,6 +104,8 @@ class BigWill:
                         market_name,
                         coins_to_sell
                     )
+                    balances_list = client.get_balances()
+                    usd_balance = self._get_usd_balance(balances_list)
                     current_positions -= 1
 
         # BUY
@@ -115,6 +121,10 @@ class BigWill:
                     time.sleep(2)
 
                     buy_quantity_in_usd = usd_balance / (self.max_positions - current_positions)
+
+                    if current_positions == 2:
+                        buy_quantity_in_usd = buy_quantity_in_usd * 0.95
+
                     current_price = client.get_current_market_price(market_name)
                     quantity_to_buy = float(buy_quantity_in_usd) / current_price
 
