@@ -9,10 +9,12 @@ from pydantic import parse_obj_as
 from app.configuration.Configuration import Configuration
 from app.models.FtxBalance import FtxBalance
 from app.models.PlaceOrderResponse import PlaceOrderResponse
+from app.services.NotificationService import NotificationService
 from app.services.Utils import Utils
 
 
 class Ftx:
+    _notification_service: NotificationService
     client = None
     log = logging.getLogger("FTX")
     # Equivalent to 15min in seconds
@@ -25,6 +27,7 @@ class Ftx:
             api_secret=config.api_secret,
             subaccount_name=config.subaccount_name
         )
+        self._notification_service = NotificationService()
 
     def get_data_from_pair(self, pair_symbol: str) -> dict:
         return self.client.get_historical_data(
@@ -54,6 +57,10 @@ class Ftx:
                 price=None
             ))
             self.log.info(f"Buy order: {response.size} coins at {response.market} market")
+            self._notification_service.send_buy_notification(
+                coin=Utils.get_token_name_from_market_name(response.market),
+                amount=response.size,
+                price=response.avgFillPrice)
             return response
         except Exception as e:
             self.log.error(f"Buy order {pair_symbol} for {tokens_number} coins: {e}")
@@ -77,6 +84,10 @@ class Ftx:
                 price=price
             ))
             self.log.info(f"{order_type} sell order: {response.size} coins at {response.market} market")
+            self._notification_service.send_sell_notification(
+                coin=Utils.get_token_name_from_market_name(response.market),
+                amount=response.size,
+                price=response.avgFillPrice)
             return response
         except Exception as e:
             self.log.error(f"Fail {order_type} sell order {pair_symbol} for {coins_numbers} coins: {e}")

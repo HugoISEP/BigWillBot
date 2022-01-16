@@ -8,6 +8,7 @@ import pandas as pd
 class Utils:
 
     NUMBER_OF_VALUES = 200
+    NOTIFICATION_TOPIC = "BIG_WILL"
 
     @staticmethod
     def load_json_pair_symbols() -> List[str]:
@@ -40,3 +41,7 @@ class Utils:
     @staticmethod
     def truncate(n: float, decimals=3):
         return floor(float(n) * 10 ** decimals) / 10 ** decimals
+
+    @staticmethod
+    def get_token_name_from_market_name(market: str) -> str:
+        return market.split("/")[0]
