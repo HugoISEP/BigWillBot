@@ -17,16 +17,16 @@ class NotificationService:
         api_url = config["api_base_url"]
         self._api_service = ApiService(api_url)
 
-    def send_buy_notification(self, coin: str, amount: float, price: float):
+    def send_buy_notification(self, coin: str, amount: float):
         notification = Notification(
             title="Buy order",
-            body=f"buy order for {amount} {coin} at {price} $",
+            body=f"buy order for {amount} {coin}",
             topic=Utils.NOTIFICATION_TOPIC)
         self._api_service.post_notification(notification)
 
-    def send_sell_notification(self, coin: str, amount: float, price: float):
+    def send_sell_notification(self, coin: str, amount: float):
         notification = Notification(
             title="Sell order",
-            body=f"sell order for {amount} {coin} at {price} $",
+            body=f"sell order for {amount} {coin}",
             topic=Utils.NOTIFICATION_TOPIC)
         self._api_service.post_notification(notification)

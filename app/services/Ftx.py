@@ -57,11 +57,9 @@ class Ftx:
                 price=None
             ))
             self.log.info(f"Buy order: {response.size} coins at {response.market} market")
-            self.log.info(f"response: {response}")
             self._notification_service.send_buy_notification(
                 coin=Utils.get_token_name_from_market_name(response.market),
-                amount=response.size,
-                price=response.price)
+                amount=response.size)
             return response
         except Exception as e:
             self.log.error(f"Buy order {pair_symbol} for {tokens_number} coins: {e}")
@@ -85,12 +83,10 @@ class Ftx:
                 price=price
             ))
             self.log.info(f"{order_type} sell order: {response.size} coins at {response.market} market")
-            self.log.info(f"response: {response}")
             if order_type != "limit":
                 self._notification_service.send_sell_notification(
                     coin=Utils.get_token_name_from_market_name(response.market),
-                    amount=response.size,
-                    price=response.price)
+                    amount=response.size)
             return response
         except Exception as e:
             self.log.error(f"Fail {order_type} sell order {pair_symbol} for {coins_numbers} coins: {e}")
